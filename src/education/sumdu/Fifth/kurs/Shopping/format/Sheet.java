@@ -9,9 +9,7 @@ public class Sheet {
     private List<Line> lines;
 
     public Sheet() {
-        header = new Line();
-        footer = new Line();
-        lines = new ArrayList<Line>();
+        this(new Line(), new Line(), new ArrayList<Line>());
     }
 
     public Sheet(Line header, Line footer, List<Line> lines) {
@@ -66,5 +64,4 @@ public class Sheet {
 
         return length;
     }
-
 }

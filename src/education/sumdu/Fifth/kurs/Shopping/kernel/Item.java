@@ -1,7 +1,5 @@
 package education.sumdu.Fifth.kurs.Shopping.kernel;
 
-import education.sumdu.Fifth.kurs.Shopping.kernel.discount.Discount;
-
 public class Item {
     private String title;
     private double price;
@@ -27,7 +25,7 @@ public class Item {
     /**
      * @param title
      *            - item title 1 to 32 symbols
-     */
+     * */
     public void setTitle(String title) {
         if (title == null || title.length() == 0 || title.length() > 32)
             throw new IllegalArgumentException("Illegal title");
@@ -41,7 +39,7 @@ public class Item {
     /**
      * @param price
      *            - item price in USD, > 0
-     */
+     * */
     public void setPrice(double price) {
         if (price < 0.01)
             throw new IllegalArgumentException("Illegal price");
@@ -55,7 +53,7 @@ public class Item {
     /**
      * @param quantity
      *            - item quantity, from 1
-     */
+     * */
     public void setQuantity(int quantity) {
         if (quantity <= 0)
             throw new IllegalArgumentException("Illegal quantity");
@@ -69,16 +67,16 @@ public class Item {
     public void setType(ItemType type) {
         this.type = type;
     }
-    
 
-    public int discount(){
-            return Discount.calculate(getType(), getQuantity());
+    public int discount() {
+        return DiscountCalculating.calculateDiscount(getType(), getQuantity());
     }
-    
+
     /**
-     * Returns the price per item based on the quantity with discount on this product. 
+     * Returns the price per item based on the quantity with discount on this
+     * product.
      * */
-    public double fullPrice(){
-            return getPrice() * getQuantity() * (100.00 - discount()) / 100.00;
+    public double fullPrice() {
+        return getPrice() * getQuantity() * (100.00 - discount()) / 100.00;
     }
 }

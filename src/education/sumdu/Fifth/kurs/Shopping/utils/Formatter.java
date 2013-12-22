@@ -13,7 +13,6 @@ import education.sumdu.Fifth.kurs.Shopping.kernel.ShoppingCart;
 
 public class Formatter {
     private static final NumberFormat MONEY;
-    
     static {
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
         symbols.setDecimalSeparator('.');
@@ -30,6 +29,10 @@ public class Formatter {
     public static Formatter getInstance() {
         return instance;
     }
+
+    private int[] columnMaxLenght;
+    private int lineLength;
+    private StringBuilder skeleton = new StringBuilder();
 
     /**
      * Formats shopping price.
@@ -57,42 +60,38 @@ public class Formatter {
         sheet.setFooter(new Line(new String[] { String.valueOf(cart.size()),
                 "", "", "", "", MONEY.format(cart.total()) }));
 
-        int[] columnMaxLenght = sheet.width();
-        int lineLength = sheet.maxLineLength();
-
-        StringBuilder sb = new StringBuilder();
+        columnMaxLenght = sheet.width();
+        lineLength = sheet.maxLineLength();
+        skeleton = new StringBuilder();
 
         // Build header
         for (int i = 0; i < sheet.getHeader().length(); i++)
-            appendFormatted(sb, sheet.getHeader().column(i), sheet.getHeader()
-                    .columnAlign(i), columnMaxLenght[i]);
-        sb.append("\n");
+            appendFormatted(sheet.getHeader(), i);
+        skeleton.append("\n");
 
-        separator(sb, lineLength);
+        separator(lineLength);
 
         // Build all item lines
         for (Line line : sheet.getLines()) {
             for (int i = 0; i < line.length(); i++)
-                appendFormatted(sb, line.column(i), line.columnAlign(i),
-                        columnMaxLenght[i]);
-            sb.append("\n");
+                appendFormatted(line, i);
+            skeleton.append("\n");
         }
 
         if (sheet.getLines().size() > 0)
-            separator(sb, lineLength);
+            separator(lineLength);
 
         // Build footer
         for (int i = 0; i < sheet.getFooter().length(); i++)
-            appendFormatted(sb, sheet.getFooter().column(i), sheet.getFooter()
-                    .columnAlign(i), columnMaxLenght[i]);
+            appendFormatted(sheet.getFooter(), i);
 
-        return sb.toString();
+        return skeleton.toString();
     }
 
-    private void separator(StringBuilder sb, int lineLength) {
+    private void separator(int lineLength) {
         for (int i = 0; i < lineLength; i++)
-            sb.append("-");
-        sb.append("\n");
+            skeleton.append("-");
+        skeleton.append("\n");
     }
 
     /**
@@ -116,24 +115,21 @@ public class Formatter {
         return lines;
     }
 
-    /**
-     * Appends to sb formatted value. Trims string if its length > width.
-     * 
-     * @param align
-     *            -1 for align left, 0 for center and +1 for align right.
-     */
-    private void appendFormatted(StringBuilder sb, String value, int align,
-            int width) {
+    private void appendFormatted(Line line, int index) {
+        String value = line.column(index);
+        int align = line.columnAlign(index);
+        int width = columnMaxLenght[index];
+
         if (value.length() > width)
             value = value.substring(0, width);
         int before = (align == 0) ? (width - value.length()) / 2
                 : (align == -1) ? 0 : width - value.length();
         int after = width - value.length() - before;
         while (before-- > 0)
-            sb.append(" ");
-        sb.append(value);
+            skeleton.append(" ");
+        skeleton.append(value);
         while (after-- > 0)
-            sb.append(" ");
-        sb.append(" ");
+            skeleton.append(" ");
+        skeleton.append(" ");
     }
 }

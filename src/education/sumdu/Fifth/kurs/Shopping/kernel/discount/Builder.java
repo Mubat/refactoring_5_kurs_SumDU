@@ -49,9 +49,6 @@ class Regular implements DiscountType {
 class SecondFree implements DiscountType {
     @Override
     public int discount(int quantity) throws UnsupportedDiscountException {
-        if (quantity > 1)
-            return 50;
-        else
-            return 0;
+        return quantity > 1? 50 : 0;
     }
 }
