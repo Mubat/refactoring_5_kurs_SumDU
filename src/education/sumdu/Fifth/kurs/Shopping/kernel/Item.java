@@ -1,4 +1,4 @@
-package education.sumdu.Fifth.kurs.Shopping;
+package education.sumdu.Fifth.kurs.Shopping.kernel;
 
 public class Item {
     private String title;
@@ -22,7 +22,12 @@ public class Item {
         return title;
     }
 
+    /**
+     * @param title - item title 1 to 32 symbols
+     */
     public void setTitle(String title) {
+        if (title == null || title.length() == 0 || title.length() > 32)
+            throw new IllegalArgumentException("Illegal title");
         this.title = title;
     }
 
@@ -30,7 +35,12 @@ public class Item {
         return price;
     }
 
+    /**
+     * @param price - item price in USD, > 0
+     */
     public void setPrice(double price) {
+        if (price < 0.01)
+            throw new IllegalArgumentException("Illegal price");
         this.price = price;
     }
 
@@ -38,7 +48,12 @@ public class Item {
         return quantity;
     }
 
+    /**
+     * @param quantity - item quantity, from 1
+     */
     public void setQuantity(int quantity) {
+        if (quantity <= 0)
+            throw new IllegalArgumentException("Illegal quantity");
         this.quantity = quantity;
     }
 

@@ -1,5 +1,8 @@
 package education.sumdu.Fifth.kurs.Shopping;
 
+import education.sumdu.Fifth.kurs.Shopping.kernel.ItemType;
+import education.sumdu.Fifth.kurs.Shopping.kernel.ShoppingCart;
+
 public class Main {
 
         public static void main(String[] args) {

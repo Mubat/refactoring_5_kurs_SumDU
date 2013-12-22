@@ -1,7 +1,6 @@
-package education.sumdu.Fifth.kurs.Shopping;
+package education.sumdu.Fifth.kurs.Shopping.kernel;
 
 public class DiscountCalculating {
-
     /**
      * Calculates item's discount. For NEW item discount is 0%; For SECOND_FREE
      * item discount is 50% if quantity > 1 For SALE item discount is 70% For
@@ -35,5 +34,4 @@ public class DiscountCalculating {
 
         return discount;
     }
-
 }

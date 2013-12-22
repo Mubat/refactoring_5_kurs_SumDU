@@ -6,6 +6,9 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import education.sumdu.Fifth.kurs.Shopping.kernel.DiscountCalculating;
+import education.sumdu.Fifth.kurs.Shopping.kernel.Item;
+
 public class Formatter {
         private static final NumberFormat MONEY;
     
