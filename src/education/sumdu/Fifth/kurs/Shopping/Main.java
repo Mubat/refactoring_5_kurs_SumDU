@@ -8,22 +8,25 @@ import education.sumdu.Fifth.kurs.Shopping.utils.Formatter;
 public class Main {
 
     public static void main(String[] args) {
-        ShoppingCart cart = new ShoppingCart();
-        cart.add(new Item("Apple", 0.99, 5, ItemType.NEW));
-        cart.add(new Item("Banana", 20.00, 4, ItemType.SECOND_FREE));
-        cart.add(new Item("A long piece of toilet paper", 
-                          17.20, 1, ItemType.SALE));
-        cart.add(new Item("Nails", 2.00, 500, ItemType.REGULAR));
-
-        Formatter f = new Formatter();
+        ShoppingCart cart = init(); // Получаем зависимость, а не создаем
 
         /* Цепочка вызовов. Могут возникнуть исключения */
-        print(f.formatTicket(cart.getItems()));
+        print(cart);
     }
 
-    static void print(Object... objects) {
-        for (Object o : objects)
-            System.out.print(o + " ");
-        System.out.println();
+    static ShoppingCart init() {
+        return new ShoppingCart() {
+            {
+                add(new Item("Apple", 0.99, 5, ItemType.NEW));
+                add(new Item("Banana", 20.00, 4, ItemType.SECOND_FREE));
+                add(new Item("A long piece of toilet paper", 17.20, 1,
+                        ItemType.SALE));
+                add(new Item("Nails", 2.00, 500, ItemType.REGULAR));
+            }
+        };
+    }
+
+    static void print(ShoppingCart cart) {
+        System.out.println(Formatter.getInstance().formatTicket(cart));
     }
 }

@@ -6,17 +6,29 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import education.sumdu.Fifth.kurs.Shopping.kernel.DiscountCalculating;
+import education.sumdu.Fifth.kurs.Shopping.format.Line;
+import education.sumdu.Fifth.kurs.Shopping.format.Sheet;
 import education.sumdu.Fifth.kurs.Shopping.kernel.Item;
-import education.sumdu.Fifth.kurs.Shopping.kernel.discount.Discount;
+import education.sumdu.Fifth.kurs.Shopping.kernel.ShoppingCart;
 
 public class Formatter {
     private static final NumberFormat MONEY;
-
+    
     static {
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
         symbols.setDecimalSeparator('.');
         MONEY = new DecimalFormat("$#.00", symbols);
+
+        instance = new Formatter();
+    }
+
+    private static Formatter instance;
+
+    private Formatter() {
+    };
+
+    public static Formatter getInstance() {
+        return instance;
     }
 
     /**
@@ -33,89 +45,84 @@ public class Formatter {
      * 
      *         if no items in cart returns "No items." string.
      */
-    public String formatTicket(List<Item> items) {
-        if (items.size() == 0)
+    public String formatTicket(ShoppingCart cart) {
+        List<Item> items = cart.getItems();
+        if (items == null || items.size() == 0)
             return "No items.";
 
-        List<String[]> lines = new ArrayList<String[]>();
+        Sheet sheet = new Sheet();
+        sheet.setLines(itemsToLines(items));
+        sheet.setHeader(new Line(new String[] { "#", "Item", "Price", "Quan.",
+                "Discount", "Total" }));
+        sheet.setFooter(new Line(new String[] { String.valueOf(cart.size()),
+                "", "", "", "", MONEY.format(cart.total()) }));
 
-        String[] header = { "#", "Item", "Price", "Quan.", "Discount", "Total" };
-        int[] align = new int[] { 1, -1, 1, 1, 1, 1 };
-
-        // formatting each line
-        double total = 0.00;
-        int index = 0;
-        for (Item item : items) {
-            int discount = Discount.calculate(item.getType(),
-                    item.getQuantity());
-            double itemTotal = item.getPrice() * item.getQuantity()
-                    * (100.00 - discount) / 100.00;
-
-            lines.add(new String[] { String.valueOf(++index), item.getTitle(),
-                    MONEY.format(item.getPrice()),
-                    String.valueOf(item.getQuantity()),
-                    (discount == 0) ? "-" : (String.valueOf(discount) + "%"),
-                    MONEY.format(itemTotal) });
-            total += itemTotal;
-        }
-        String[] footer = { String.valueOf(index), "", "", "", "",
-                MONEY.format(total) };
-
-        // formatting table
-
-        // column max length
-        int[] width = new int[] { 0, 0, 0, 0, 0, 0 };
-        for (String[] line : lines)
-            for (int i = 0; i < line.length; i++)
-                width[i] = (int) Math.max(width[i], line[i].length());
-        for (int i = 0; i < header.length; i++)
-            width[i] = (int) Math.max(width[i], header[i].length());
-        for (int i = 0; i < footer.length; i++)
-            width[i] = (int) Math.max(width[i], footer[i].length());
-
-        // line length
-        int lineLength = width.length - 1;
-        for (int w : width)
-            lineLength += w;
+        int[] columnMaxLenght = sheet.width();
+        int lineLength = sheet.maxLineLength();
 
         StringBuilder sb = new StringBuilder();
 
-        // header
-        for (int i = 0; i < header.length; i++)
-            appendFormatted(sb, header[i], align[i], width[i]);
+        // Build header
+        for (int i = 0; i < sheet.getHeader().length(); i++)
+            appendFormatted(sb, sheet.getHeader().column(i), sheet.getHeader()
+                    .columnAlign(i), columnMaxLenght[i]);
         sb.append("\n");
 
-        // separator
+        separator(sb, lineLength);
+
+        // Build all item lines
+        for (Line line : sheet.getLines()) {
+            for (int i = 0; i < line.length(); i++)
+                appendFormatted(sb, line.column(i), line.columnAlign(i),
+                        columnMaxLenght[i]);
+            sb.append("\n");
+        }
+
+        if (sheet.getLines().size() > 0)
+            separator(sb, lineLength);
+
+        // Build footer
+        for (int i = 0; i < sheet.getFooter().length(); i++)
+            appendFormatted(sb, sheet.getFooter().column(i), sheet.getFooter()
+                    .columnAlign(i), columnMaxLenght[i]);
+
+        return sb.toString();
+    }
+
+    private void separator(StringBuilder sb, int lineLength) {
         for (int i = 0; i < lineLength; i++)
             sb.append("-");
         sb.append("\n");
+    }
 
-        // lines
-        for (String[] line : lines) {
-            for (int i = 0; i < line.length; i++)
-                appendFormatted(sb, line[i], align[i], width[i]);
-            sb.append("\n");
+    /**
+     * Formatting each line
+     * */
+    private List<Line> itemsToLines(List<Item> items) {
+        List<Line> lines = new ArrayList<Line>();
+
+        int index = 0;
+        for (Item item : items) {
+            lines.add(new Line(
+                    new String[] {
+                            String.valueOf(++index),
+                            item.getTitle(),
+                            MONEY.format(item.getPrice()),
+                            String.valueOf(item.getQuantity()),
+                            (item.discount() == 0) ? "-" : (String.valueOf(item
+                                    .discount()) + "%"),
+                            MONEY.format(item.fullPrice()) }));
         }
-        if (lines.size() > 0) {
-            // separator
-            for (int i = 0; i < lineLength; i++)
-                sb.append("-");
-            sb.append("\n");
-        }
-
-        // footer
-        for (int i = 0; i < footer.length; i++)
-            appendFormatted(sb, footer[i], align[i], width[i]);
-
-        return sb.toString();
+        return lines;
     }
 
     /**
      * Appends to sb formatted value. Trims string if its length > width.
      * 
-     * @param align -1 for align left, 0 for center and +1 for align right.
+     * @param align
+     *            -1 for align left, 0 for center and +1 for align right.
      */
-    public void appendFormatted(StringBuilder sb, String value, int align,
+    private void appendFormatted(StringBuilder sb, String value, int align,
             int width) {
         if (value.length() > width)
             value = value.substring(0, width);

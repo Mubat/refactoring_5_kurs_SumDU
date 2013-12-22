@@ -1,5 +1,7 @@
 package education.sumdu.Fifth.kurs.Shopping.kernel;
 
+import education.sumdu.Fifth.kurs.Shopping.kernel.discount.Discount;
+
 public class Item {
     private String title;
     private double price;
@@ -66,5 +68,17 @@ public class Item {
 
     public void setType(ItemType type) {
         this.type = type;
+    }
+    
+
+    public int discount(){
+            return Discount.calculate(getType(), getQuantity());
+    }
+    
+    /**
+     * Returns the price per item based on the quantity with discount on this product. 
+     * */
+    public double fullPrice(){
+            return getPrice() * getQuantity() * (100.00 - discount()) / 100.00;
     }
 }
