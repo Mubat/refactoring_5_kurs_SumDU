@@ -7,8 +7,13 @@ import java.util.List;
  * Containing items and calculating price.
  */
 public class ShoppingCart {
-    public void addItem(String title, double price, int quantity, ItemType type) {
-        items.add(new Item(title, price, quantity, type));
+
+    public void add(Item i) {
+        items.add(i);
+    }
+
+    public void remove(Item i) {
+        items.remove(i);
     }
 
     public List<Item> getItems() {

@@ -9,10 +9,10 @@ public class Discount {
      * each full 10 not NEW items item gets additional 1% discount, but not more
      * than 80% total
      */
-    public static int calculate(ItemType type, int quantity) {
+    public static int calculate(ItemType item, int quantity) {
         try {
-            DiscountType build = Builder.build(type);
-            int discount = build.discount(quantity);
+            DiscountType type = Builder.build(item);
+            int discount = type.discount(quantity);
 
             if (discount < 80) {
                 discount += quantity / 10;

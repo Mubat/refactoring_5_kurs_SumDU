@@ -8,6 +8,7 @@ import java.util.List;
 
 import education.sumdu.Fifth.kurs.Shopping.kernel.DiscountCalculating;
 import education.sumdu.Fifth.kurs.Shopping.kernel.Item;
+import education.sumdu.Fifth.kurs.Shopping.kernel.discount.Discount;
 
 public class Formatter {
     private static final NumberFormat MONEY;
@@ -45,8 +46,8 @@ public class Formatter {
         double total = 0.00;
         int index = 0;
         for (Item item : items) {
-            int discount = DiscountCalculating.calculateDiscount(
-                    item.getType(), item.getQuantity());
+            int discount = Discount.calculate(item.getType(),
+                    item.getQuantity());
             double itemTotal = item.getPrice() * item.getQuantity()
                     * (100.00 - discount) / 100.00;
 
@@ -109,13 +110,10 @@ public class Formatter {
         return sb.toString();
     }
 
-    // --- private section -----------------------------------------------------
-
     /**
      * Appends to sb formatted value. Trims string if its length > width.
      * 
-     * @param align
-     *            -1 for align left, 0 for center and +1 for align right.
+     * @param align -1 for align left, 0 for center and +1 for align right.
      */
     public void appendFormatted(StringBuilder sb, String value, int align,
             int width) {

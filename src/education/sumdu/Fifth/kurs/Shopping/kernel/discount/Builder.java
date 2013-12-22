@@ -6,16 +6,14 @@ import java.util.Map;
 import education.sumdu.Fifth.kurs.Shopping.kernel.ItemType;
 
 class Builder {
-    @SuppressWarnings("serial")
-    private static Map<ItemType, Class<? extends DiscountType>> actions = 
-                    new HashMap<ItemType, Class<? extends DiscountType>>() {
-        {
-            actions.put(ItemType.NEW, New.class);
-            actions.put(ItemType.SALE, Sale.class);
-            actions.put(ItemType.REGULAR, Regular.class);
-            actions.put(ItemType.SECOND_FREE, SecondFree.class);
-        }
-    };
+    private static Map<ItemType, Class<? extends DiscountType>> actions;
+    static {
+        actions = new HashMap<ItemType, Class<? extends DiscountType>>();
+        actions.put(ItemType.NEW, New.class);
+        actions.put(ItemType.SALE, Sale.class);
+        actions.put(ItemType.REGULAR, Regular.class);
+        actions.put(ItemType.SECOND_FREE, SecondFree.class);
+    }
 
     static DiscountType build(ItemType type) {
         try {
@@ -25,7 +23,6 @@ class Builder {
                     + ", builder cannot build handler.");
         }
     }
-
 }
 
 class New implements DiscountType {
