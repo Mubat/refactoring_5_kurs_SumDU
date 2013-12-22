@@ -2,6 +2,7 @@ package education.sumdu.Fifth.kurs.Shopping;
 
 import education.sumdu.Fifth.kurs.Shopping.kernel.ItemType;
 import education.sumdu.Fifth.kurs.Shopping.kernel.ShoppingCart;
+import education.sumdu.Fifth.kurs.Shopping.utils.Formatter;
 
 public class Main {
 
