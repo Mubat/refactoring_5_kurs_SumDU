@@ -23,7 +23,8 @@ public class Item {
     }
 
     /**
-     * @param title - item title 1 to 32 symbols
+     * @param title
+     *            - item title 1 to 32 symbols
      */
     public void setTitle(String title) {
         if (title == null || title.length() == 0 || title.length() > 32)
@@ -36,7 +37,8 @@ public class Item {
     }
 
     /**
-     * @param price - item price in USD, > 0
+     * @param price
+     *            - item price in USD, > 0
      */
     public void setPrice(double price) {
         if (price < 0.01)
@@ -49,7 +51,8 @@ public class Item {
     }
 
     /**
-     * @param quantity - item quantity, from 1
+     * @param quantity
+     *            - item quantity, from 1
      */
     public void setQuantity(int quantity) {
         if (quantity <= 0)
