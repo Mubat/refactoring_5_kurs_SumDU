@@ -51,10 +51,9 @@ public class Formatter {
      *          if no items in cart returns "No items." string.
      */
     public String formatTicket(ShoppingCart cart) {
-        List<Item> items = cart.getItems();
-        if (items == null || items.size() == 0)
+        if (cart == null || cart.getItems().size() == 0)
             return "No items.";
-
+        List<Item> items = cart.getItems();
         Sheet sheet = new Sheet();
         sheet.setLines(itemsToLines(items));
         sheet.setHeader(new Line(new String[] { "#", "Item", "Price", "Quan.",
