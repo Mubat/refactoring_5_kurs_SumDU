@@ -5,3 +5,6 @@
 *.war
 *.ear
 /bin
+/compile.cmd - Ярлык.lnk
+/run.cmd - Ярлык.lnk
+/unit-tests.cmd - Ярлык.lnk

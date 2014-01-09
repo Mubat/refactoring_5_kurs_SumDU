@@ -1,1 +1,2 @@
-java -cp classes ShoppingCart
+java -cp bin education.sumdu.Fifth.kurs.Shopping.Main
+pause
