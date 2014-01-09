@@ -89,21 +89,19 @@ public class TestShoppingCart {
     
     @Test(expected=NullPointerException.class)
     public void testNullPointerExceptionRemove() throws NullPointerException {
-        List<Item> expectedList = new ArrayList<Item>();
         Item testItem = new Item("TestItem1", 2.0, 1, ItemType.NEW);
-        expectedList.add(testItem);
-        expectedList.remove(null);
+        testCart.add(testItem);
+        testCart.remove(null);
         Assert.fail("Expected NullPointerException not returned " +
                 "after removing same Item twice from Cart.");
     }
     
     @Test(expected=IllegalArgumentException.class)
     public void testIllegalArgumentExceptionRemove() throws IllegalArgumentException {
-        List<Item> expectedList = new ArrayList<Item>();
         Item testItem = new Item("TestItem1", 2.0, 1, ItemType.NEW);
-        expectedList.add(testItem);
-        expectedList.remove(testItem);
-        expectedList.remove(testItem);
+        testCart.add(testItem);
+        testCart.remove(testItem);
+        testCart.remove(testItem);
         Assert.fail("Expected IllegalArgumentException not returned " +
         		"after removing same Item twice from Cart.");
     }
