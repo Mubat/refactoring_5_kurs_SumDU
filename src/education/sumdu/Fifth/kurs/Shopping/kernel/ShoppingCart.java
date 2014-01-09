@@ -13,6 +13,12 @@ public class ShoppingCart {
     }
 
     public void remove(Item i) {
+        if(i == null) {
+            throw new NullPointerException("Item for deleting can`t be NULL");
+        } 
+        if(!items.contains(i)) {
+            throw new IllegalArgumentException("Shopping cart does not contain item [" + i.getTitle() + "].");
+        }
         items.remove(i);
     }
 
